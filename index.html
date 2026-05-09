@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abdifatah Ibrahim</title>
+
+    <!-- Premium Fonts -->
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS styles -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+    <!-- Unified Global Atmosphere -->
+    <div class="bg-grid"></div>
+    <div class="ambient-glow global-ambient"></div>
+    <div class="noise-overlay"></div>
+    <div class="cursor-glow" id="cursor-glow"></div>
+
+    <!-- Minimal Premium Navigation -->
+    <nav class="glass-nav">
+        <a href="#hero" class="nav-brand">ibrahim.</a>
+        <div class="nav-links">
+            <a href="#hero">Home</a>
+            <a href="#work">Work</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Light/Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- OS-Level Social Dock (Right) -->
+    <aside class="social-dock">
+        <a href="https://github.com/jjibrah" class="social-btn" aria-label="GitHub" data-tooltip="GitHub">
+            <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/abdifatah-ibrahim-b158931b6/" class="social-btn" aria-label="LinkedIn"
+            data-tooltip="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+        <a href="https://wa.me/254798272697?text=Hi%20Abdifatah,%20I'm%20reaching%20out%20regarding..." target="_blank"
+            rel="noopener noreferrer" class="social-btn" aria-label="WhatsApp" data-tooltip="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="mailto:ibrabdi109@gmail.com" class="social-btn" aria-label="Email" data-tooltip="Email">
+            <i class="fa-regular fa-envelope"></i>
+        </a>
+    </aside>
+
+    <main class="page-wrapper">
+
+        <!-- HERO SECTION -->
+        <section class="hero-section" id="hero">
+            <!-- Cinematic Globe Background Layer -->
+            <canvas id="hero-globe" class="hero-globe-canvas"></canvas>
+
+            <div class="hero-grid">
+
+                <div class="hero-content slide-up-element">
+                    <div class="status-badge">
+                        <span class="pulse-dot"></span>
+                        Open to internships & collaborations
+                    </div>
+
+                    <h1 class="hero-title">
+                        Building systems, products, and <span class="highlight-cyan">infrastructure</span>
+                        with an engineer’s mindset.
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        A systems-oriented computer science student passionate about architecture, problem solving,
+                        startups, and understanding how technology works beneath the UI layer.
+                    </p>
+
+                    <div class="hero-cta">
+                        <a href="#work" class="btn btn-primary primary-glow">
+                            View Projects
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#" placeholder="Coming soon..." class="btn btn-secondary">
+                            <i class="fa-regular fa-file-lines"></i>
+                            Download Resume
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-visual slide-up-element delay-1">
+                    <div class="profile-glass-card tilt-profile">
+                        <div class="card-ambient-light"></div>
+                        <div class="profile-img-wrapper">
+                            <div class="img-glow-overlay"></div>
+                            <img src="profile.png" alt="Abdifatah Ibrahim" />
+                        </div>
+                        <div class="profile-info">
+                            <div class="profile-header">
+                                <h3>Abdifatah Ibrahim</h3>
+                                <span class="profile-tag">CS · '27</span>
+                            </div>
+                            <p class="profile-role">Systems engineer & product builder</p>
+                            <div class="profile-location">
+                                <i class="fa-solid fa-location-dot"></i>
+                                Remote · Worldwide
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PROJECT EXPERIENCE (MINIMAL PREVIEWS) -->
+        <section class="projects-section section-padding offset-section" id="work">
+            <div class="section-header center-align slide-up-element">
+                <h2 class="section-heading">Selected Work.</h2>
+                <p class="section-desc">Engineering systems from architecture to production.</p>
+            </div>
+
+            <div class="project-preview-grid">
+
+                <!-- Flagship Project -->
+                <div class="project-teaser glass-card interactive-card flagship-teaser cascade-up"
+                    data-project="amanah">
+                    <div class="teaser-header">
+                        <div class="p-brand-badge">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <span class="teaser-status cyan">In Production</span>
+                    </div>
+                    <div class="teaser-body">
+                        <h3>Amanah Logistics</h3>
+                        <p>End-to-end logistics platform orchestration.</p>
+                    </div>
+                    <div class="teaser-footer">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Firebase</span>
+                        <span class="tech-tag">Node.js</span>
+                    </div>
+                </div>
+
+                <!-- Secondary High-Value Project -->
+                <div class="project-teaser glass-card interactive-card cascade-up delay-1" data-project="pota">
+                    <div class="teaser-header">
+                        <span class="teaser-status emerald">Beta System</span>
+                    </div>
+                    <div class="teaser-body">
+                        <h3>POTA</h3>
+                        <p>Operating layer for personal outcomes tracking.</p>
+                    </div>
+                    <div class="teaser-footer">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">Firestore</span>
+                    </div>
+                </div>
+
+                <!-- Mini Project 1 -->
+                <div class="project-teaser glass-card interactive-card cascade-up delay-2" data-project="idempotency">
+                    <div class="teaser-header">
+                        <span class="teaser-status default">Open Source</span>
+                    </div>
+                    <div class="teaser-body">
+                        <h3>Idempotency Core</h3>
+                        <p>Exactly-once semantics middleware.</p>
+                    </div>
+                    <div class="teaser-footer">
+                        <span class="tech-tag">Redis</span>
+                        <span class="tech-tag">Node.js</span>
+                    </div>
+                </div>
+
+                <!-- Mini Project 2 -->
+                <div class="project-teaser glass-card interactive-card cascade-up" data-project="oauth">
+                    <div class="teaser-header">
+                        <span class="teaser-status default">Open Source</span>
+                    </div>
+                    <div class="teaser-body">
+                        <h3>Google OAuth Module</h3>
+                        <p>Framework-agnostic robust OAuth implementation.</p>
+                    </div>
+                    <div class="teaser-footer">
+                        <span class="tech-tag">Auth</span>
+                        <span class="tech-tag">Node.js</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ABOUT / SYSTEMS THINKING -->
+        <section class="about-section section-padding offset-section" id="about">
+            <div class="about-ambient-mesh">
+                <div class="mesh-orb orb-1"></div>
+                <div class="mesh-orb orb-2"></div>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text slide-up-element">
+                    <h2 class="section-heading">Engineering Philosophy.</h2>
+                    <p class="about-paragraph highlight-paragraph">
+                        I value building and experimentation more than passive theoretical learning.
+                    </p>
+                    <p class="about-paragraph regular-paragraph">
+                        Software is fundamentally about solving human problems through elegant systems. I approach
+                        development not just by writing code, but by understanding the architectural implications of
+                        every decision. My journey is defined by intellectual curiosity—tearing down complex systems to
+                        understand their constraints, scalable limits, and how they drive product value.
+                    </p>
+
+                    <div class="skills-lineup">
+                        <span class="skill-chip">System Design</span>
+                        <span class="skill-chip">API Architecture</span>
+                        <span class="skill-chip">Backend Ops</span>
+                        <span class="skill-chip">Cloud Auth</span>
+                        <span class="skill-chip">Product UX</span>
+                    </div>
+                </div>
+
+                <!-- THE RESTORED JOURNEY TIMELINE -->
+                <div class="about-timeline slide-up-element delay-1">
+                    <h3 class="timeline-heading">Journey Summary</h3>
+                    <div class="timeline-box glass-card">
+                        <div class="t-item">
+                            <span class="t-year">2026</span>
+                            <div class="t-content">
+                                <h4>Internship-ready</h4>
+                                <p>Targeting product engineering roles at high-leverage tech companies.</p>
+                            </div>
+                        </div>
+                        <div class="t-item">
+                            <span class="t-year">2025</span>
+                            <div class="t-content">
+                                <h4>Amanah Logistics</h4>
+                                <p>Co-founded a logistics platform — designed systems layer end-to-end.</p>
+                            </div>
+                        </div>
+                        <div class="t-item">
+                            <span class="t-year">2024</span>
+                            <div class="t-content">
+                                <h4>First production scale</h4>
+                                <p>Shipped backend services with resilient auth, payments, and observability.</p>
+                            </div>
+                        </div>
+
+                        <button id="view-journey-btn" class="btn btn-outline journey-btn">
+                            <i class="fa-solid fa-timeline"></i> View Full Journey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES & PARTNERSHIPS -->
+        <section class="services-section section-padding offset-section" id="services">
+            <div class="section-header center-align slide-up-element">
+                <h2 class="section-heading">Services & Partnerships.</h2>
+                <p class="section-desc">Executing technical vision for start-ups and ambitious founders.</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card glass-card slide-up-element base-delay">
+                    <div class="service-icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <h3>Build</h3>
+                    <p>Web apps, Firebase integrations, and highly polished UI implementations with engineering rigor.
+                    </p>
+                </div>
+
+                <div class="service-card glass-card slide-up-element delay-1">
+                    <div class="service-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3>MVP Sprint</h3>
+                    <p>From idea to launchable product in 2-4 weeks. System design, full-stack MVP, and foundational
+                        analytics.</p>
+                </div>
+
+                <div class="service-card glass-card slide-up-element delay-2">
+                    <div class="service-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <h3>Partnership</h3>
+                    <p>Long-term technical partner for early-stage founders. Managing architecture, technical hiring,
+                        and roadmap.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT UX REDESIGN -->
+        <section class="contact-section section-padding offset-section" id="contact">
+            <div class="section-header center-align slide-up-element">
+                <h2 class="section-heading">Let's connect.</h2>
+                <p class="section-desc">Select your intent below to start a conversation.</p>
+            </div>
+
+            <div class="contact-intent-grid slide-up-element delay-1">
+                <!-- Intent 1: Recruiters -->
+                <div class="intent-card glass-card interactive-card">
+                    <div class="intent-icon"><i class="fa-solid fa-building-user"></i></div>
+                    <h3>Recruiters</h3>
+                    <p>Professional, concise, confident conversations regarding internships and hiring opportunities.
+                    </p>
+                    <button class="btn btn-outline intent-btn contact-modal-trigger" data-intent="recruiter">Open
+                        Form</button>
+                </div>
+
+                <!-- Intent 2: Startup Partners -->
+                <div class="intent-card glass-card interactive-card">
+                    <div class="intent-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h3>Startup Partners</h3>
+                    <p>Founder-minded, strategic collaboration on product architecture and co-building ventures.</p>
+                    <button class="btn btn-primary intent-btn contact-modal-trigger" data-intent="startup">Discuss a
+                        Product Idea</button>
+                </div>
+
+                <!-- Intent 3: Freelance Clients -->
+                <div class="intent-card glass-card interactive-card">
+                    <div class="intent-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                    <h3>Freelance Clients</h3>
+                    <p>Execution-focused product development, MVP sprints, and robust systems architecture.</p>
+                    <button class="btn btn-outline intent-btn contact-modal-trigger" data-intent="freelance">Start a
+                        Project</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-copy">
+                <span>Abdifatah Ibrahim.</span> © 2026 Designed and Built.
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- CINEMATIC PROJECT MODAL (REFINED UX) -->
+    <div class="modal-overlay" id="project-modal">
+        <div class="modal-container project-case-modal">
+            <button class="modal-close" id="modal-close" aria-label="Close Case Study">&times;</button>
+            <div class="modal-content-area minimal-scrollbar" id="modal-content">
+                <!-- Content dynamically populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FULL JOURNEY MODAL OVERLAY -->
+    <div class="modal-overlay" id="journey-modal">
+        <div class="modal-container journey-view-modal">
+            <button class="modal-close" id="journey-close" aria-label="Close Journey">&times;</button>
+            <div class="modal-content-area minimal-scrollbar">
+                <span class="m-badge">Systems Engineer Story</span>
+                <h2 class="m-title" style="margin-bottom: 2rem;">The Full Journey</h2>
+
+                <div class="full-timeline">
+                    <!-- Current Focus -->
+                    <div class="ft-phase">
+                        <div class="ft-phase-header">
+                            <i class="fa-solid fa-crosshairs phase-icon"></i>
+                            <h4>Current Focus</h4>
+                        </div>
+                        <div class="ft-event glass-card">
+                            <span class="t-year">2026 - Present</span>
+                            <h5>Internships & High-Leverage Teams</h5>
+                            <p>Actively positioning for product engineering roles where architecture drives business
+                                outcomes. Looking to join engineering cultures that value rigorous systems thinking.</p>
+                        </div>
+                    </div>
+
+                    <!-- Startup Exploration -->
+                    <div class="ft-phase">
+                        <div class="ft-phase-header">
+                            <i class="fa-solid fa-rocket phase-icon"></i>
+                            <h4>Startup Exploration Phase</h4>
+                        </div>
+                        <div class="ft-event glass-card">
+                            <span class="t-year">2025</span>
+                            <h5>Co-founded Amanah Logistics</h5>
+                            <p>Transitioned from solo-developer to technical founder. Engineered the entire backend
+                                orchestration system, managing real-time driver routing and resilient cloud operations
+                                under extreme latency constraints.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project Building -->
+                    <div class="ft-phase">
+                        <div class="ft-phase-header">
+                            <i class="fa-solid fa-code phase-icon"></i>
+                            <h4>Project Building Phase</h4>
+                        </div>
+                        <div class="ft-event glass-card">
+                            <span class="t-year">2024</span>
+                            <h5>First Production Deployments</h5>
+                            <p>Began shipping architectures mimicking enterprise workflows. Built exactly-once semantic
+                                middleware (Idempotency Core) and developed robust personal state trackers (POTA).
+                                Learned the harsh realities of deployment, CI/CD, and database throttling.</p>
+                        </div>
+                    </div>
+
+                    <!-- Learning Phase -->
+                    <div class="ft-phase">
+                        <div class="ft-phase-header">
+                            <i class="fa-solid fa-book-open phase-icon"></i>
+                            <h4>Foundational Learning Phase</h4>
+                        </div>
+                        <div class="ft-event glass-card">
+                            <span class="t-year">2023 - 2024</span>
+                            <h5>Computer Science Foundations</h5>
+                            <p>Dove heavily into raw CS concepts. Avoided visual frameworks initially to understand data
+                                structures, algorithms, and object-oriented paradigms. Gained a massive appreciation for
+                                how things actually work at the memory layer.</p>
+                        </div>
+                        <div class="ft-event glass-card">
+                            <span class="t-year">2022</span>
+                            <h5>The First Scripts</h5>
+                            <p>Wrote my very first lines of code. Discovered the empowerment of instructing a machine to
+                                solve logic puzzles. The obsession with "systems" started here.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT MODAL FRAMEWORK -->
+    <div class="modal-overlay" id="contact-modal">
+        <div class="modal-container contact-form-modal">
+            <button class="modal-close" id="contact-close" aria-label="Close Form">&times;</button>
+            <div class="modal-content-area minimal-scrollbar">
+                <span class="m-badge">Secure Channel</span>
+                <h2 class="m-title" style="font-size:2.2rem; margin-bottom: 0.5rem;">Start a Connection</h2>
+                <p class="m-subtitle" style="margin-bottom: 2rem;">Fill out the structured request below and it will be
+                    routed directly to my secure notification system.</p>
+
+                <form id="contact-form" class="m-form">
+                    <div class="form-group">
+                        <label for="c-name">Full Name</label>
+                        <input type="text" id="c-name" required placeholder="Jane Doe" class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-email">Email Address</label>
+                        <input type="email" id="c-email" required placeholder="jane@company.com" class="glass-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="c-purpose">Intent & Purpose</label>
+                        <div class="select-wrapper">
+                            <select id="c-purpose" required class="glass-input">
+                                <option value="recruiter">Recruiter / Internship Pipeline</option>
+                                <option value="startup">Startup & Technical Partnership</option>
+                                <option value="freelance">Freelance Client MVP</option>
+                                <option value="other">Other Inquiry</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-icon"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="c-message">System Context / Message</label>
+                        <textarea id="c-message" required placeholder="How can we collaborate on engineering solutions?"
+                            class="glass-input glass-textarea" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-submit-container">
+                        <button type="submit" class="btn btn-primary primary-glow form-submit-btn">
+                            <span class="btn-text">Transmit Message</span>
+                            <i class="fa-solid fa-paper-plane btn-icon"></i>
+                            <span class="btn-loader" style="display:none;"><i
+                                    class="fa-solid fa-circle-notch fa-spin"></i></span>
+                        </button>
+                        <p class="form-status" id="form-validation-msg" style="display:none;"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts for interactions -->
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
