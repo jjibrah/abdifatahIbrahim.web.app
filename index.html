@@ -97,6 +97,8 @@
                             Download Resume
                         </a>
                     </div>
+
+
                 </div>
 
                 <div class="hero-visual slide-up-element delay-1">
@@ -131,72 +133,7 @@
             </div>
 
             <div class="project-preview-grid">
-
-                <!-- Flagship Project -->
-                <div class="project-teaser glass-card interactive-card flagship-teaser cascade-up"
-                    data-project="amanah">
-                    <div class="teaser-header">
-                        <div class="p-brand-badge">
-                            <i class="fa-solid fa-truck-fast"></i>
-                        </div>
-                        <span class="teaser-status cyan">In Production</span>
-                    </div>
-                    <div class="teaser-body">
-                        <h3>Amanah Logistics</h3>
-                        <p>End-to-end logistics platform orchestration.</p>
-                    </div>
-                    <div class="teaser-footer">
-                        <span class="tech-tag">React</span>
-                        <span class="tech-tag">Firebase</span>
-                        <span class="tech-tag">Node.js</span>
-                    </div>
-                </div>
-
-                <!-- Secondary High-Value Project -->
-                <div class="project-teaser glass-card interactive-card cascade-up delay-1" data-project="pota">
-                    <div class="teaser-header">
-                        <span class="teaser-status emerald">Beta System</span>
-                    </div>
-                    <div class="teaser-body">
-                        <h3>POTA</h3>
-                        <p>Operating layer for personal outcomes tracking.</p>
-                    </div>
-                    <div class="teaser-footer">
-                        <span class="tech-tag">Next.js</span>
-                        <span class="tech-tag">Firestore</span>
-                    </div>
-                </div>
-
-                <!-- Mini Project 1 -->
-                <div class="project-teaser glass-card interactive-card cascade-up delay-2" data-project="idempotency">
-                    <div class="teaser-header">
-                        <span class="teaser-status default">Open Source</span>
-                    </div>
-                    <div class="teaser-body">
-                        <h3>Idempotency Core</h3>
-                        <p>Exactly-once semantics middleware.</p>
-                    </div>
-                    <div class="teaser-footer">
-                        <span class="tech-tag">Redis</span>
-                        <span class="tech-tag">Node.js</span>
-                    </div>
-                </div>
-
-                <!-- Mini Project 2 -->
-                <div class="project-teaser glass-card interactive-card cascade-up" data-project="oauth">
-                    <div class="teaser-header">
-                        <span class="teaser-status default">Open Source</span>
-                    </div>
-                    <div class="teaser-body">
-                        <h3>Google OAuth Module</h3>
-                        <p>Framework-agnostic robust OAuth implementation.</p>
-                    </div>
-                    <div class="teaser-footer">
-                        <span class="tech-tag">Auth</span>
-                        <span class="tech-tag">Node.js</span>
-                    </div>
-                </div>
-
+                <!-- Data populated dynamically by Firestore via main.js -->
             </div>
         </section>
 
@@ -233,28 +170,9 @@
                 <div class="about-timeline slide-up-element delay-1">
                     <h3 class="timeline-heading">Journey Summary</h3>
                     <div class="timeline-box glass-card">
-                        <div class="t-item">
-                            <span class="t-year">2026</span>
-                            <div class="t-content">
-                                <h4>Internship-ready</h4>
-                                <p>Targeting product engineering roles at high-leverage tech companies.</p>
-                            </div>
+                        <div id="dynamic-journey-summary">
+                            <!-- Populated by Firestore via main.js (highlights collection) -->
                         </div>
-                        <div class="t-item">
-                            <span class="t-year">2025</span>
-                            <div class="t-content">
-                                <h4>Amanah Logistics</h4>
-                                <p>Co-founded a logistics platform — designed systems layer end-to-end.</p>
-                            </div>
-                        </div>
-                        <div class="t-item">
-                            <span class="t-year">2024</span>
-                            <div class="t-content">
-                                <h4>First production scale</h4>
-                                <p>Shipped backend services with resilient auth, payments, and observability.</p>
-                            </div>
-                        </div>
-
                         <button id="view-journey-btn" class="btn btn-outline journey-btn">
                             <i class="fa-solid fa-timeline"></i> View Full Journey
                         </button>

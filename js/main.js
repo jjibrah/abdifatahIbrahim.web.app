@@ -1,4 +1,4 @@
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db, logEvent, analytics } from "./firestore.js";
 
 /**
@@ -140,141 +140,186 @@ import { db, logEvent, analytics } from "./firestore.js";
         });
     });
 
-    // Track scroll direction for a cleaner header experience
+    // Rollback experimental nav scroll logic for stability
+    /*
     let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        const nav = document.querySelector('.glass-nav');
-        if (!nav) return;
-
-        if (currentScroll > lastScroll && currentScroll > 80) {
-            nav.style.transform = 'translateY(-100%)';
-        } else {
-            nav.style.transform = 'translateY(0)';
-        }
-        lastScroll = currentScroll;
-    });
+    window.addEventListener('scroll', () => { ... });
+    */
 
     /* =========================================================================
-       5. PROJECT MODAL ENGINE
+       5. DYNAMIC PROJECT BENTO ENGINE
        ========================================================================= */
-    const projectsData = {
-        amanah: {
-            title: "Amanah Logistics",
-            subtitle: "End-to-end logistics platform & operations core.",
-            tech: "React • Node.js • Firebase • Maps API",
-            desc: "Designed the systems layer end-to-end for a fast-scaling logistics startup. The platform handles real-time tracking, comprehensive dispatcher dashboards, dynamic route optimization, and a payments-ready operations core.",
-            design: "Built around event-driven architecture to ensure dispatchers and drivers remain perfectly synchronized. Heavily utilized Firestore's real-time socket connections for sub-second state propagation.",
-            challenges: "Handling real-time state mutations cleanly across thousands of map points required engineering a bespoke, memoized update pipeline to avoid React re-render thrashing.",
-            liveUrl: "",
-            repoUrl: ""
-        },
-        pota: {
-            title: "POTA",
-            subtitle: "Operating layer for personal task and outcome tracking.",
-            tech: "TypeScript • Next.js • Firestore",
-            desc: "An operating system built around systems-thinking workflows. POTA diverges from standard to-do lists by operating on immutable states and long-term objective tracking.",
-            design: "Leveraged Next.js Server Components for lightning-fast initial loads, integrated with heavy client-side hydration for absolute offline-first interactive capabilities.",
-            challenges: "Structuring the highly-relational Firestore database to allow complex, nested querying of daily outcomes without suffering massive compounding read-ops costs.",
-            liveUrl: "",
-            repoUrl: ""
-        },
-        idempotency: {
-            title: "Idempotency System",
-            subtitle: "Drop-in middleware ensuring exactly-once semantics.",
-            tech: "Node.js • Redis",
-            desc: "A backend service created to handle volatile network states, guaranteeing that retried HTTP requests do not trigger duplicate database transactions or payment operations.",
-            design: "Uses Redis caching and distributed locks to intercept incoming request signatures and gracefully handle overlaps synchronously.",
-            challenges: "Avoiding race conditions across horizontally scaled Node instances requiring deep dives into Redis TTL and SETNX limitations.",
-            liveUrl: "",
-            repoUrl: ""
-        },
-        oauth: {
-            title: "Google OAuth Module",
-            subtitle: "Reusable, framework-agnostic OAuth implementation.",
-            tech: "Node.js • OAuth 2.0",
-            desc: "A completely modular authentication system wrapped around Google's API, decoupled from heavy libraries like Passport to provide absolute control over the auth pipeline.",
-            design: "Implemented rigorous refresh-token rotation and HTTP-only cookie strategies to maximize security against XSS attacks.",
-            challenges: "Handling token expiration states seamlessly through middleware interceptors without degrading client-side performance.",
-            liveUrl: "",
-            repoUrl: ""
-        }
-    };
-
+    const projectGrid = document.querySelector('.project-preview-grid');
     const modalOverlay = document.getElementById('project-modal');
     const modalClose = document.getElementById('modal-close');
     const modalContent = document.getElementById('modal-content');
+    
+    // Global data store to be populated by Firestore
+    let projectsData = {};
 
     const openModal = (projectId) => {
         const data = projectsData[projectId];
         if (!data) return;
 
+        // Build the Technical Deep Dive sections
+        const architectureSection = data.technicalDeepDive?.architecture 
+            ? `<details class="m-accordion" open>
+                <summary>Architectural Decisions</summary>
+                <div class="m-accordion-content">${data.technicalDeepDive.architecture}</div>
+               </details>` : '';
+        
+        const pmSection = data.technicalDeepDive?.productManagement 
+            ? `<details class="m-accordion">
+                <summary>Technical & Product Leadership</summary>
+                <div class="m-accordion-content">${data.technicalDeepDive.productManagement}</div>
+               </details>` : '';
+
         // Dynamically build the Modal UI
         modalContent.innerHTML = `
-            <span class="m-badge">Systems Showcase</span>
+            <span class="m-badge">${data.tier === 'major' ? 'Flagship System' : 'Technical Module'}</span>
             <h2 class="m-title">${data.title}</h2>
-            <p class="m-subtitle">${data.subtitle}</p>
+            <p class="m-subtitle">${data.desc}</p>
             
             <div class="m-stack">
-                <span class="tech-tag">${data.tech}</span>
+                ${data.techStack.map(t => `<span class="tech-tag">${t}</span>`).join('')}
             </div>
 
             <h4 class="m-section-title">System Overview</h4>
             <p class="m-text">${data.desc}</p>
             
-            <details class="m-accordion" open>
-                <summary>Architectural Decisions</summary>
-                <div class="m-accordion-content">${data.design}</div>
-            </details>
-            
-            <details class="m-accordion">
-                <summary>Engineering Challenges</summary>
-                <div class="m-accordion-content">${data.challenges}</div>
-            </details>
+            ${architectureSection}
+            ${pmSection}
             
             <div class="m-links">
-                ${data.liveUrl ? `<a href="${data.liveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary primary-glow">View Deployment</a>` : ''}
-                ${data.repoUrl ? `<a href="${data.repoUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fa-brands fa-github"></i> Repository</a>` : ''}
+                ${data.liveUrl ? `<a href="${data.liveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary primary-glow">View Deployment</a>` : `<span class="btn btn-disabled">Still Under Development</span>`}
+                ${data.githubUrl ? `<a href="${data.githubUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline"><i class="fa-brands fa-github"></i> Repository</a>` : ''}
             </div>
         `;
 
         modalOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Stop background scrolling
-        
-        // Track project view
-        logEvent(analytics, 'project_view', {
-            project_id: projectId,
-            project_name: data.title
-        });
+        document.body.style.overflow = 'hidden';
+
+        logEvent(analytics, 'project_view', { project_id: projectId, project_name: data.title });
     };
 
-    // Bind click listeners to ALL teaser cards
-    document.querySelectorAll('.project-teaser').forEach(card => {
-        card.addEventListener('click', () => {
-            const key = card.getAttribute('data-project');
-            openModal(key);
+    // Firestore Listener: Auto-updates UI when DB changes
+    const q = query(collection(db, "projects"), orderBy("order", "asc"));
+    onSnapshot(q, (snapshot) => {
+        if (!projectGrid) return;
+        
+        projectGrid.innerHTML = ''; // Clear for re-render
+        projectsData = {}; // Clear store
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const id = doc.id;
+            projectsData[id] = data;
+
+            // Create Project Card
+            const card = document.createElement('div');
+            const tierClass = data.tier === 'major' ? 'major-card' : 'mini-card';
+            const statusClass = data.status.toLowerCase().includes('live') ? 'cyan' : 'emerald';
+            
+            card.className = `project-teaser glass-card interactive-card in-view ${tierClass}`;
+            card.setAttribute('data-project', id);
+            
+            card.innerHTML = `
+                <div class="teaser-header">
+                    <div class="p-brand-badge">
+                        <i class="fa-solid ${data.tier === 'major' ? 'fa-rocket' : 'fa-code'}"></i>
+                    </div>
+                    <span class="teaser-status ${statusClass}">${data.status}</span>
+                </div>
+                <div class="teaser-body">
+                    <h3>${data.title}</h3>
+                    <p>${data.desc}</p>
+                </div>
+                <div class="teaser-footer">
+                    ${data.techStack.slice(0, 3).map(t => `<span class="tech-tag">${t}</span>`).join('')}
+                </div>
+            `;
+            
+            card.addEventListener('click', () => openModal(id));
+            projectGrid.appendChild(card);
         });
     });
 
-    if (modalClose) {
-        modalClose.addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
-    }
+    // 5.2 UNIFIED JOURNEY & HIGHLIGHTS ENGINE
+    const highlightsQ = query(collection(db, "highlights"), orderBy("order", "asc"));
+    
+    onSnapshot(highlightsQ, (snapshot) => {
+        try {
+            const timelineContainer = document.querySelector('.full-timeline');
+            const highlightsContainer = document.querySelector('.hero-stats');
+            const aboutSummaryContainer = document.getElementById('dynamic-journey-summary');
 
-    if (modalOverlay) {
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-    }
+            if (timelineContainer) timelineContainer.innerHTML = '';
+            if (highlightsContainer) highlightsContainer.innerHTML = '';
+            if (aboutSummaryContainer) aboutSummaryContainer.innerHTML = '';
 
-    /* =========================================================================
-       6. JOURNEY MODAL LOGIC
-       ========================================================================= */
+            snapshot.docs.forEach((doc, index) => {
+                const h = doc.data();
+                
+                // Safety Filter: Skip documents that look like profile bio data
+                const isProfileData = h.title === "Abdifatah Ibrahim" || h.year === "Download Resume";
+                if (isProfileData) return;
+                
+                // 1. RENDER FULL MODAL (Every entry)
+                if (timelineContainer) {
+                    const phaseEl = document.createElement('div');
+                    phaseEl.className = 'ft-phase';
+                    const langTags = (h.languages && h.languages.length > 0) 
+                        ? `<div class="m-stack" style="margin-bottom: 1rem; border-bottom: none; padding-bottom: 0;">
+                            ${h.languages.map(l => `<span class="tech-tag" style="background: rgba(0, 240, 255, 0.05); color: var(--sys-accent-cyan);">${l}</span>`).join('')}
+                           </div>` 
+                        : '';
+                    phaseEl.innerHTML = `
+                        <div class="ft-event glass-card">
+                            <span class="t-year">${h.year || ''}</span>
+                            <h5>${h.title || 'Untitled'}</h5>
+                            ${langTags}
+                            <p>${h.description || ''}</p>
+                        </div>
+                    `;
+                    timelineContainer.appendChild(phaseEl);
+                }
+
+                // 2. RENDER SUMMARIES (Only top 3)
+                if (index < 3) {
+                    const previewText = h.preview || h.description || '';
+                    
+                    if (highlightsContainer) {
+                        const hEl = document.createElement('div');
+                        hEl.className = 'stat-item';
+                        hEl.innerHTML = `
+                            <div class="stat-top">
+                                <span class="stat-label">${h.year || ''}</span>
+                                ${(h.year === '2026' || h.year === 'Target') ? '<span class="stat-dot"></span>' : ''}
+                            </div>
+                            <h4>${h.title || 'Untitled'}</h4>
+                            <p>${previewText}</p>
+                        `;
+                        highlightsContainer.appendChild(hEl);
+                    }
+
+                    if (aboutSummaryContainer) {
+                        const aEl = document.createElement('div');
+                        aEl.className = 't-item';
+                        aEl.innerHTML = `
+                            <span class="t-year">${h.year || ''}</span>
+                            <div class="t-content">
+                                <h4>${h.title || 'Untitled'}</h4>
+                                <p>${previewText}</p>
+                            </div>
+                        `;
+                        aboutSummaryContainer.appendChild(aEl);
+                    }
+                }
+            });
+        } catch (err) {
+            console.error("Firestore Rendering Error:", err);
+        }
+    });
     const journeyModal = document.getElementById('journey-modal');
     const journeyClose = document.getElementById('journey-close');
     const viewJourneyBtn = document.getElementById('view-journey-btn');

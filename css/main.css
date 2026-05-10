@@ -383,20 +383,19 @@ html.light-theme .primary-glow {
     position: fixed;
     top: 1.5rem;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) !important; /* Force re-center */
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1.5rem;
-    background: rgba(10, 10, 14, 0.5);
+    background: rgba(10, 10, 14, 0.7);
     backdrop-filter: var(--sys-bg-blur);
     -webkit-backdrop-filter: var(--sys-bg-blur);
     border: 1px solid var(--sys-border);
     border-radius: 100px;
-    z-index: 100;
+    z-index: 1000;
     width: calc(100% - 3rem);
     max-width: 700px;
-    transition: var(--tr-med);
 }
 
 html.light-theme .glass-nav {
@@ -620,7 +619,37 @@ html.light-theme .profile-glass-card { box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 /* =========================================================================
    PROJECT SYSTEM (PREVIEWS)
    ========================================================================= */
-.project-preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+/* Dynamic Bento Grid System */
+.project-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+/* Major Cards Span Full Width */
+.project-teaser.major-card {
+    grid-column: span 2;
+    min-height: 300px;
+}
+
+/* Mini Cards Stay Side-by-Side */
+.project-teaser.mini-card {
+    grid-column: span 1;
+    min-height: 300px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .project-preview-grid {
+        grid-template-columns: 1fr;
+    }
+    .project-teaser.major-card,
+    .project-teaser.mini-card {
+        grid-column: span 1;
+    }
+}
+
 .project-teaser { padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; height: 240px; cursor: pointer; }
 .flagship-teaser { grid-column: span 2; }
 .flagship-teaser .teaser-body h3 { font-size: 1.6rem; }
@@ -660,7 +689,8 @@ html.light-theme .modal-overlay { background: rgba(255,255,255,0.5); }
 
 /* Compact width for Project specific reading clarity */
 .project-case-modal { max-width: 650px; height: 80vh; }
-.journey-view-modal { max-width: 600px; height: 80vh; }
+.journey-view-modal { max-width: 650px; height: 80vh; overflow: hidden; }
+.journey-view-modal .minimal-scrollbar { overflow-y: auto !important; height: calc(100% - 20px); }
 .contact-form-modal { max-width: 550px; height: auto; max-height: 90vh; }
 
 .modal-close {
@@ -825,7 +855,7 @@ html.dark-theme .journey-btn { color: white; background: rgba(255,255,255,0.03);
 html.dark-theme .journey-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); box-shadow: 0 0 15px rgba(255,255,255,0.05); }
 
 /* Full Journey Modal Content */
-.full-timeline { display: flex; flex-direction: column; gap: 2rem; }
+.full-timeline { display: flex; flex-direction: column; gap: 2rem; height: auto; }
 .ft-phase-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--sys-border); }
 .phase-icon { font-size: 1.2rem; color: var(--sys-text-secondary); padding: 0.7rem; background: var(--sys-surface-2); border-radius: 50%; }
 .ft-phase-header h4 { font-size: 1.3rem; font-weight: 500;}

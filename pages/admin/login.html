@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Gateway | Abdifatah Ibrahim</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .admin-login-wrapper {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--sys-bg);
+            padding: 2rem;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 3rem;
+            text-align: center;
+        }
+        .login-header { margin-bottom: 2.5rem; }
+        .login-header i { font-size: 3rem; color: var(--sys-accent-cyan); margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="ambient-glow global-ambient"></div>
+    
+    <main class="admin-login-wrapper">
+        <div class="login-card glass-card">
+            <div class="login-header">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h1 class="m-title" style="font-size: 2rem;">Admin Gateway</h1>
+                <p class="m-subtitle">Authorize to access system management.</p>
+            </div>
+
+            <form id="login-form" class="m-form">
+                <div class="form-group">
+                    <label for="admin-email">Identity (Email)</label>
+                    <input type="email" id="admin-email" required placeholder="admin@system.com" class="glass-input">
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Credential (Password)</label>
+                    <input type="password" id="admin-password" required placeholder="••••••••" class="glass-input">
+                </div>
+
+                <div class="form-submit-container">
+                    <button type="submit" id="login-btn" class="btn btn-primary primary-glow form-submit-btn" style="width: 100%;">
+                        <span class="btn-text">Authenticate</span>
+                        <i class="fa-solid fa-key btn-icon"></i>
+                    </button>
+                    <p id="error-msg" class="error" style="display: none; margin-top: 1rem; font-size: 0.85rem;"></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script type="module">
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { auth } from "../../js/firestore.js";
+
+        const loginForm = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const errorMsg = document.getElementById('error-msg');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginBtn.classList.add('loading');
+            errorMsg.style.display = 'none';
+
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // Success - redirect to dashboard (to be built)
+                window.location.href = "admin.html";
+            } catch (error) {
+                console.error(error);
+                errorMsg.innerText = "Authentication failed. Access denied.";
+                errorMsg.style.display = 'block';
+                loginBtn.classList.remove('loading');
+            }
+        });
+    </script>
+</body>
+</html>

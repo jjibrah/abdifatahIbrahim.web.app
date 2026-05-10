@@ -13,7 +13,7 @@
     }
   ],
   "hosting": {
-    "site": "AbdifatahIbrahim",
+    "site": "abdifatahibrahim",
     "public": ".",
     "ignore": [
       "firebase.json",

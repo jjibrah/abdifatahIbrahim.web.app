@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Systems Management</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        :root { --admin-bg: #050507; --admin-surface: #0f0f13; }
+        body { background: var(--admin-bg); overflow: hidden; }
+        .admin-layout { display: grid; grid-template-columns: 260px 1fr; height: 100vh; }
+        
+        .admin-sidebar { background: var(--admin-surface); border-right: 1px solid var(--sys-border); padding: 2rem; display: flex; flex-direction: column; }
+        .nav-list { list-style: none; margin-top: 3rem; flex-grow: 1; }
+        .nav-btn { width: 100%; display: flex; align-items: center; gap: 1rem; padding: 1rem; color: var(--sys-text-secondary); background: transparent; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 0.5rem; text-align: left; font-size: 0.95rem; }
+        .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.05); color: var(--sys-accent-cyan); }
+        
+        .admin-main { padding: 3rem; overflow-y: auto; position: relative; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s easeOut; }
+        
+        .data-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .admin-card { background: var(--admin-surface); border: 1px solid var(--sys-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+        .card-preview-text { font-size: 0.85rem; color: var(--sys-text-secondary); display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; margin-top: 0.25rem; }
+        
+        .form-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 2rem; }
+        .form-overlay.active { display: flex; }
+        .form-container { background: var(--sys-bg); border: 1px solid var(--sys-border-hover); border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 2.5rem; }
+        
+        .lang-tag { font-size: 0.7rem; background: rgba(0, 240, 255, 0.1); color: var(--sys-accent-cyan); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.4rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <h2 class="nav-brand">ibrahim.admin</h2>
+            <nav class="nav-list">
+                <button class="nav-btn active" data-tab="tab-dashboard"><i class="fa-solid fa-gauge"></i> Overview</button>
+                <button class="nav-btn" data-tab="tab-projects"><i class="fa-solid fa-folder"></i> Projects</button>
+                <button class="nav-btn" data-tab="tab-highlights"><i class="fa-solid fa-bolt"></i> Highlights</button>
+            </nav>
+            <button id="logout-btn" class="btn btn-outline" style="width: 100%; border-radius: 12px; margin-top: auto;">Sign Out</button>
+        </aside>
+
+        <main class="admin-main">
+            <div id="tab-dashboard" class="tab-content active">
+                <h1 class="m-title">System Status</h1>
+                <div class="db-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem;">
+                    <div class="glass-card" style="padding: 2rem;">
+                        <span style="color: var(--sys-text-secondary); font-size: 0.8rem;">Live Projects</span>
+                        <h2 id="stat-projects" style="font-size: 3rem;">-</h2>
+                    </div>
+                    <div class="glass-card" style="padding: 2rem;">
+                        <span style="color: var(--sys-text-secondary); font-size: 0.8rem;">Career Highlights</span>
+                        <h2 id="stat-highlights" style="font-size: 3rem;">-</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-projects" class="tab-content">
+                <div class="data-header">
+                    <h1 class="m-title">Projects</h1>
+                    <button class="btn btn-primary" id="btn-add-project"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div id="project-admin-list"></div>
+            </div>
+
+            <div id="tab-highlights" class="tab-content">
+                <div class="data-header">
+                    <h1 class="m-title">Highlights</h1>
+                    <button class="btn btn-primary" id="btn-add-highlight"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div id="highlight-admin-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- PROJECT FORM -->
+    <div id="project-overlay" class="form-overlay">
+        <div class="form-container">
+            <h2 class="m-title" id="p-form-title">Update Project</h2>
+            <form id="project-form" class="m-form">
+                <input type="hidden" id="p-id">
+                <div class="form-group"><label>Title</label><input type="text" id="p-title" class="glass-input" required></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group"><label>Tier</label><select id="p-tier" class="glass-input"><option value="major">Major</option><option value="mini">Mini</option></select></div>
+                    <div class="form-group"><label>Order</label><input type="number" id="p-order" class="glass-input"></div>
+                </div>
+                <div class="form-group"><label>Status</label><input type="text" id="p-status" class="glass-input"></div>
+                <div class="form-group"><label>Stack (Comma separated)</label><input type="text" id="p-stack" class="glass-input"></div>
+                <div class="form-group"><label>Description</label><textarea id="p-desc" class="glass-input glass-textarea" required></textarea></div>
+                <div class="form-group"><label>Architecture Notes</label><textarea id="p-arch" class="glass-input glass-textarea"></textarea></div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save</button>
+                    <button type="button" class="btn btn-outline close-form-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- HIGHLIGHT FORM -->
+    <div id="highlight-overlay" class="form-overlay">
+        <div class="form-container">
+            <h2 class="m-title" id="h-form-title">Update Highlight</h2>
+            <form id="highlight-form" class="m-form">
+                <input type="hidden" id="h-id">
+                <div class="form-group"><label>Year / Category</label><input type="text" id="h-year" class="glass-input" required></div>
+                <div class="form-group"><label>Title</label><input type="text" id="h-title" class="glass-input" required></div>
+                <div class="form-group"><label>Short Preview (Hero & Summary)</label><textarea id="h-preview" class="glass-input glass-textarea" placeholder="Max 15-20 words..."></textarea></div>
+                <div class="form-group"><label>Full Description (Journey Modal)</label><textarea id="h-desc" class="glass-input glass-textarea" required></textarea></div>
+                <div class="form-group"><label>Languages Learned (Comma separated)</label><input type="text" id="h-langs" class="glass-input" placeholder="e.g. JavaScript, Python, Go"></div>
+                <div class="form-group"><label>Order</label><input type="number" id="h-order" class="glass-input" value="1"></div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save</button>
+                    <button type="button" class="btn btn-outline close-form-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { collection, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { db, auth } from "../../js/firestore.js";
+
+        let localProjects = {};
+        let localHighlights = {};
+
+        // AUTH
+        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "login.html"; });
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+
+        // TABS
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(btn.dataset.tab).classList.add('active');
+                btn.classList.add('active');
+            });
+        });
+
+        // FORM HELPERS
+        const closeModals = () => document.querySelectorAll('.form-overlay').forEach(o => o.classList.remove('active'));
+        document.querySelectorAll('.close-form-btn').forEach(b => b.addEventListener('click', closeModals));
+
+        // RENDER LISTS
+        onSnapshot(query(collection(db, "projects"), orderBy("order", "asc")), (snap) => {
+            const list = document.getElementById('project-admin-list');
+            list.innerHTML = '';
+            document.getElementById('stat-projects').innerText = snap.size;
+            snap.forEach(d => {
+                const data = d.data();
+                localProjects[d.id] = data;
+                const card = document.createElement('div');
+                card.className = 'admin-card';
+                card.innerHTML = `
+                    <div style="flex: 1;">
+                        <strong>${data.title}</strong>
+                        <div class="card-preview-text">${data.desc}</div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-outline" onclick="editProject('${d.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-outline" onclick="deleteItem('projects', '${d.id}')" style="color: #ef4444;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        });
+
+        onSnapshot(query(collection(db, "highlights"), orderBy("order", "asc")), (snap) => {
+            const list = document.getElementById('highlight-admin-list');
+            list.innerHTML = '';
+            document.getElementById('stat-highlights').innerText = snap.size;
+            snap.forEach(d => {
+                const data = d.data();
+                localHighlights[d.id] = data;
+                const card = document.createElement('div');
+                card.className = 'admin-card';
+                card.innerHTML = `
+                    <div style="flex: 1;">
+                        <strong>${data.year}: ${data.title}</strong>
+                        <div class="card-preview-text">${data.description}</div>
+                        <div style="margin-top: 0.5rem;">${(data.languages || []).map(l => `<span class="lang-tag">${l}</span>`).join('')}</div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-outline" onclick="editHighlight('${d.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-outline" onclick="deleteItem('highlights', '${d.id}')" style="color: #ef4444;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        });
+
+        // ACTIONS
+        window.deleteItem = async (c, id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, c, id)); };
+
+        // EDIT LOGIC
+        window.editProject = (id) => {
+            const d = localProjects[id];
+            document.getElementById('p-id').value = id;
+            document.getElementById('p-title').value = d.title;
+            document.getElementById('p-tier').value = d.tier;
+            document.getElementById('p-order').value = d.order;
+            document.getElementById('p-status').value = d.status || '';
+            document.getElementById('p-stack').value = (d.techStack || []).join(', ');
+            document.getElementById('p-desc').value = d.desc;
+            document.getElementById('p-arch').value = d.technicalDeepDive?.architecture || '';
+            document.getElementById('p-form-title').innerText = "Edit Project";
+            document.getElementById('project-overlay').classList.add('active');
+        };
+
+        window.editHighlight = (id) => {
+            const d = localHighlights[id];
+            document.getElementById('h-id').value = id;
+            document.getElementById('h-year').value = d.year;
+            document.getElementById('h-title').value = d.title;
+            document.getElementById('h-preview').value = d.preview || '';
+            document.getElementById('h-desc').value = d.description;
+            document.getElementById('h-langs').value = (d.languages || []).join(', ');
+            document.getElementById('h-order').value = d.order;
+            document.getElementById('h-form-title').innerText = "Edit Highlight";
+            document.getElementById('highlight-overlay').classList.add('active');
+        };
+
+        // SUBMIT LOGIC
+        document.getElementById('project-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('p-id').value;
+            const data = {
+                title: document.getElementById('p-title').value,
+                tier: document.getElementById('p-tier').value,
+                order: parseInt(document.getElementById('p-order').value),
+                status: document.getElementById('p-status').value,
+                techStack: document.getElementById('p-stack').value.split(',').map(s => s.trim()).filter(s => s),
+                desc: document.getElementById('p-desc').value,
+                technicalDeepDive: { architecture: document.getElementById('p-arch').value },
+                isMajor: document.getElementById('p-tier').value === 'major'
+            };
+            if(id) await setDoc(doc(db, "projects", id), data);
+            else await addDoc(collection(db, "projects"), data);
+            closeModals();
+        });
+
+        document.getElementById('highlight-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('h-id').value;
+            const data = {
+                year: document.getElementById('h-year').value,
+                title: document.getElementById('h-title').value,
+                preview: document.getElementById('h-preview').value,
+                description: document.getElementById('h-desc').value,
+                languages: document.getElementById('h-langs').value.split(',').map(s => s.trim()).filter(s => s),
+                order: parseInt(document.getElementById('h-order').value)
+            };
+            if(id) await setDoc(doc(db, "highlights", id), data);
+            else await addDoc(collection(db, "highlights"), data);
+            closeModals();
+        });
+
+        document.getElementById('btn-add-project').onclick = () => { document.getElementById('project-form').reset(); document.getElementById('p-id').value = ''; document.getElementById('p-form-title').innerText = "New Project"; document.getElementById('project-overlay').classList.add('active'); };
+        document.getElementById('btn-add-highlight').onclick = () => { document.getElementById('highlight-form').reset(); document.getElementById('h-id').value = ''; document.getElementById('h-form-title').innerText = "New Highlight"; document.getElementById('highlight-overlay').classList.add('active'); };
+
+    </script>
+</body>
+</html>
