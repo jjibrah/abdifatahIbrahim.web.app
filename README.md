@@ -2,7 +2,6 @@
 
 A high-performance, production-grade portfolio platform architected for systems engineers and product founders. This platform is fully dynamic, powered by a custom Firebase CMS, and features a cinematic dark-themed UI.
 
-![Portfolio Preview](profile.png)
 
 ## 🏗️ Technical Architecture
 
