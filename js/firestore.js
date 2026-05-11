@@ -8,11 +8,12 @@ import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12
 const firebaseConfig = {
   apiKey: "AIzaSyDfYSRkOp3Rpzx246KcvAU72Jidk59VwFk",
   authDomain: "my-portfolio-45ff0.firebaseapp.com",
+  databaseURL: "https://my-portfolio-45ff0-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "my-portfolio-45ff0",
   storageBucket: "my-portfolio-45ff0.firebasestorage.app",
   messagingSenderId: "439232880032",
   appId: "1:439232880032:web:5da6b51b0d37cd915918c5",
-  measurementId: "G-8ERD5N6LRS" // Add your measurement ID here if you have it, otherwise Firebase often auto-detects
+  measurementId: "G-S844G7LPJY"
 };
 
 // Initialize Firebase
