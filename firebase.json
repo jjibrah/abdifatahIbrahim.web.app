@@ -18,7 +18,15 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "migrate.js",
+      "migrate_highlights.html",
+      "migrate_journey.html",
+      "migration.html",
+      "test.html",
+      "cms.md",
+      "sturcture.md",
+      ".gitingore"
     ]
   }
 }

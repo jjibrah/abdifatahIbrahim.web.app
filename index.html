@@ -26,10 +26,11 @@
     <div class="ambient-glow global-ambient"></div>
     <div class="noise-overlay"></div>
     <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="toast-container" id="toast-container"></div>
 
     <!-- Minimal Premium Navigation -->
     <nav class="glass-nav">
-        <a href="#hero" class="nav-brand">ibrahim.</a>
+        <a href="#hero" class="nav-brand dyn-brand">ibrahim.</a>
         <div class="nav-links">
             <a href="#hero">Home</a>
             <a href="#work">Work</a>
@@ -45,21 +46,8 @@
     </nav>
 
     <!-- OS-Level Social Dock (Right) -->
-    <aside class="social-dock">
-        <a href="https://github.com/jjibrah" class="social-btn" aria-label="GitHub" data-tooltip="GitHub">
-            <i class="fa-brands fa-github"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/abdifatah-ibrahim-b158931b6/" class="social-btn" aria-label="LinkedIn"
-            data-tooltip="LinkedIn">
-            <i class="fa-brands fa-linkedin-in"></i>
-        </a>
-        <a href="https://wa.me/254798272697?text=Hi%20Abdifatah,%20I'm%20reaching%20out%20regarding..." target="_blank"
-            rel="noopener noreferrer" class="social-btn" aria-label="WhatsApp" data-tooltip="WhatsApp">
-            <i class="fa-brands fa-whatsapp"></i>
-        </a>
-        <a href="mailto:ibrabdi109@gmail.com" class="social-btn" aria-label="Email" data-tooltip="Email">
-            <i class="fa-regular fa-envelope"></i>
-        </a>
+    <aside class="social-dock dyn-social-dock">
+        <!-- Populated dynamically -->
     </aside>
 
     <main class="page-wrapper">
@@ -72,27 +60,25 @@
             <div class="hero-grid">
 
                 <div class="hero-content slide-up-element">
-                    <div class="status-badge">
+                    <div class="status-badge" id="dyn-hero-status">
                         <span class="pulse-dot"></span>
-                        Open to internships & collaborations
+                        Loading status...
                     </div>
 
-                    <h1 class="hero-title">
-                        Building systems, products, and <span class="highlight-cyan">infrastructure</span>
-                        with an engineer’s mindset.
+                    <h1 class="hero-title" id="dyn-hero-title">
+                        Loading technical vision...
                     </h1>
 
-                    <p class="hero-subtitle">
-                        A systems-oriented computer science student passionate about architecture, problem solving,
-                        startups, and understanding how technology works beneath the UI layer.
+                    <p class="hero-subtitle" id="dyn-hero-subtitle">
+                        ...
                     </p>
 
                     <div class="hero-cta">
-                        <a href="#work" class="btn btn-primary primary-glow">
+                        <a href="#work" class="btn btn-primary primary-glow" id="dyn-hero-cta">
                             View Projects
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
-                        <a href="#" placeholder="Coming soon..." class="btn btn-secondary">
+                        <a href="#" class="btn btn-secondary" id="dyn-hero-resume">
                             <i class="fa-regular fa-file-lines"></i>
                             Download Resume
                         </a>
@@ -106,17 +92,17 @@
                         <div class="card-ambient-light"></div>
                         <div class="profile-img-wrapper">
                             <div class="img-glow-overlay"></div>
-                            <img src="profile.png" alt="Abdifatah Ibrahim" />
+                            <img src="profile.png" alt="Abdifatah Ibrahim" id="dyn-profile-img" />
                         </div>
                         <div class="profile-info">
                             <div class="profile-header">
-                                <h3>Abdifatah Ibrahim</h3>
-                                <span class="profile-tag">CS · '27</span>
+                                <h3 id="dyn-profile-name">Abdifatah Ibrahim</h3>
+                                <span class="profile-tag" id="dyn-profile-tag">CS · '27</span>
                             </div>
-                            <p class="profile-role">Systems engineer & product builder</p>
+                            <p class="profile-role" id="dyn-profile-role">Systems engineer & product builder</p>
                             <div class="profile-location">
                                 <i class="fa-solid fa-location-dot"></i>
-                                Remote · Worldwide
+                                <span id="dyn-profile-location">Remote · Worldwide</span>
                             </div>
                         </div>
                     </div>
@@ -129,7 +115,7 @@
         <section class="projects-section section-padding offset-section" id="work">
             <div class="section-header center-align slide-up-element">
                 <h2 class="section-heading">Selected Work.</h2>
-                <p class="section-desc">Engineering systems from architecture to production.</p>
+                <p class="section-desc" id="dyn-projects-desc">Engineering systems from architecture to production.</p>
             </div>
 
             <div class="project-preview-grid">
@@ -146,23 +132,16 @@
 
             <div class="about-grid">
                 <div class="about-text slide-up-element">
-                    <h2 class="section-heading">Engineering Philosophy.</h2>
-                    <p class="about-paragraph highlight-paragraph">
-                        I value building and experimentation more than passive theoretical learning.
+                    <h2 class="section-heading" id="dyn-about-heading">Engineering Philosophy.</h2>
+                    <p class="about-paragraph highlight-paragraph" id="dyn-about-highlight">
+                        ...
                     </p>
-                    <p class="about-paragraph regular-paragraph">
-                        Software is fundamentally about solving human problems through elegant systems. I approach
-                        development not just by writing code, but by understanding the architectural implications of
-                        every decision. My journey is defined by intellectual curiosity—tearing down complex systems to
-                        understand their constraints, scalable limits, and how they drive product value.
+                    <p class="about-paragraph regular-paragraph" id="dyn-about-body">
+                        ...
                     </p>
 
-                    <div class="skills-lineup">
-                        <span class="skill-chip">System Design</span>
-                        <span class="skill-chip">API Architecture</span>
-                        <span class="skill-chip">Backend Ops</span>
-                        <span class="skill-chip">Cloud Auth</span>
-                        <span class="skill-chip">Product UX</span>
+                    <div class="skills-lineup" id="dyn-about-chips">
+                        <!-- Chips injected dynamically -->
                     </div>
                 </div>
 
@@ -185,38 +164,19 @@
         <section class="services-section section-padding offset-section" id="services">
             <div class="section-header center-align slide-up-element">
                 <h2 class="section-heading">Services & Partnerships.</h2>
-                <p class="section-desc">Executing technical vision for start-ups and ambitious founders.</p>
+                <p class="section-desc" id="dyn-services-desc">Supporting founders and teams in turning ideas into functional, well-structured digital products.</p>
             </div>
 
-            <div class="services-grid">
-                <div class="service-card glass-card slide-up-element base-delay">
-                    <div class="service-icon"><i class="fa-solid fa-code-branch"></i></div>
-                    <h3>Build</h3>
-                    <p>Web apps, Firebase integrations, and highly polished UI implementations with engineering rigor.
-                    </p>
-                </div>
-
-                <div class="service-card glass-card slide-up-element delay-1">
-                    <div class="service-icon"><i class="fa-solid fa-rocket"></i></div>
-                    <h3>MVP Sprint</h3>
-                    <p>From idea to launchable product in 2-4 weeks. System design, full-stack MVP, and foundational
-                        analytics.</p>
-                </div>
-
-                <div class="service-card glass-card slide-up-element delay-2">
-                    <div class="service-icon"><i class="fa-solid fa-handshake"></i></div>
-                    <h3>Partnership</h3>
-                    <p>Long-term technical partner for early-stage founders. Managing architecture, technical hiring,
-                        and roadmap.</p>
-                </div>
+            <div class="services-grid" id="dyn-services-grid">
+                <!-- Dynamic Service Cards -->
             </div>
         </section>
 
         <!-- CONTACT UX REDESIGN -->
         <section class="contact-section section-padding offset-section" id="contact">
             <div class="section-header center-align slide-up-element">
-                <h2 class="section-heading">Let's connect.</h2>
-                <p class="section-desc">Select your intent below to start a conversation.</p>
+                <h2 class="section-heading" id="dyn-contact-heading">Let's connect.</h2>
+                <p class="section-desc" id="dyn-contact-desc">Select your intent below to start a conversation.</p>
             </div>
 
             <div class="contact-intent-grid slide-up-element delay-1">
@@ -252,7 +212,10 @@
 
         <footer class="footer">
             <div class="footer-copy">
-                <span>Abdifatah Ibrahim.</span> © 2026 Designed and Built.
+                <span class="dyn-brand">Abdifatah Ibrahim.</span> © 2026 Designed and Built.
+            </div>
+            <div class="footer-social-links" style="margin-top: 1rem; display: flex; justify-content: center; gap: 1.5rem;">
+                <!-- Re-rendered Dynamic Links will appear here too if needed -->
             </div>
         </footer>
 

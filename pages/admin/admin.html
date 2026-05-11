@@ -3,270 +3,614 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Systems Management</title>
+    <title>Systems Admin | Portfolio CMS</title>
+    
+    <!-- Premium Fonts -->
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Core Styles -->
     <link rel="stylesheet" href="../../css/main.css">
+    
     <style>
-        :root { --admin-bg: #050507; --admin-surface: #0f0f13; }
-        body { background: var(--admin-bg); overflow: hidden; }
-        .admin-layout { display: grid; grid-template-columns: 260px 1fr; height: 100vh; }
+        :root { 
+            --admin-bg: #050507; 
+            --admin-surface: #0f0f13;
+            --admin-accent: #00f0ff;
+        }
         
-        .admin-sidebar { background: var(--admin-surface); border-right: 1px solid var(--sys-border); padding: 2rem; display: flex; flex-direction: column; }
-        .nav-list { list-style: none; margin-top: 3rem; flex-grow: 1; }
-        .nav-btn { width: 100%; display: flex; align-items: center; gap: 1rem; padding: 1rem; color: var(--sys-text-secondary); background: transparent; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 0.5rem; text-align: left; font-size: 0.95rem; }
-        .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,0.05); color: var(--sys-accent-cyan); }
+        body { 
+            background: var(--admin-bg); 
+            overflow: hidden; 
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-layout { 
+            display: grid; 
+            grid-template-columns: 280px 1fr; 
+            height: 100vh; 
+        }
         
-        .admin-main { padding: 3rem; overflow-y: auto; position: relative; }
+        /* Sidebar Styles */
+        .admin-sidebar { 
+            background: var(--admin-surface); 
+            border-right: 1px solid var(--sys-border); 
+            padding: 2.5rem 1.5rem; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .nav-brand {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            padding-left: 1rem;
+        }
+
+        .nav-list { list-style: none; flex-grow: 1; }
+        
+        .nav-btn { 
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+            padding: 1rem 1.25rem; 
+            color: var(--sys-text-secondary); 
+            background: transparent; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            margin-bottom: 0.5rem; 
+            text-align: left; 
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .nav-btn:hover, .nav-btn.active { 
+            background: rgba(255,255,255,0.05); 
+            color: var(--admin-accent); 
+        }
+
+        /* Main Content */
+        .admin-main { 
+            padding: 3.5rem; 
+            overflow-y: auto; 
+            position: relative; 
+            background: radial-gradient(circle at top right, rgba(0, 240, 255, 0.03), transparent 40%);
+        }
+
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s easeOut; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+        .data-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2.5rem; 
+        }
+
+        /* Card List */
+        .admin-card { 
+            background: var(--admin-surface); 
+            border: 1px solid var(--sys-border); 
+            border-radius: 16px; 
+            padding: 1.5rem 2rem; 
+            margin-bottom: 1.25rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 2rem;
+            transition: 0.3s;
+        }
         
-        .data-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .admin-card { background: var(--admin-surface); border: 1px solid var(--sys-border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
-        .card-preview-text { font-size: 0.85rem; color: var(--sys-text-secondary); display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; margin-top: 0.25rem; }
+        .admin-card:hover {
+            border-color: var(--sys-border-hover);
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .card-info h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+        .card-preview-text { 
+           font-size: 0.85rem; 
+           color: var(--sys-text-secondary); 
+           display: -webkit-box; 
+           -webkit-line-clamp: 1; 
+           line-clamp: 1; 
+           -webkit-box-orient: vertical; 
+           overflow: hidden; 
+        }
+
+        /* Form Overlay & Container */
+        .form-overlay { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(12px); 
+            z-index: 2000; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 2rem; 
+        }
         
-        .form-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 2rem; }
         .form-overlay.active { display: flex; }
-        .form-container { background: var(--sys-bg); border: 1px solid var(--sys-border-hover); border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 2.5rem; }
         
-        .lang-tag { font-size: 0.7rem; background: rgba(0, 240, 255, 0.1); color: var(--sys-accent-cyan); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.4rem; }
+        .form-container { 
+            background: var(--sys-bg); 
+            border: 1px solid var(--sys-border-hover); 
+            border-radius: 24px; 
+            width: 100%; 
+            max-width: 800px; 
+            max-height: 90vh; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        /* Grouped Form Styles */
+        .form-header {
+            padding: 2.5rem 2.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-body {
+            padding: 0 2.5rem 2.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .form-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--sys-border);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--admin-accent);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        /* Dynamic List Editor */
+        .dynamic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .dynamic-item {
+            background: var(--admin-surface);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--sys-border);
+            position: relative;
+        }
+
+        .remove-item-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--sys-text-tertiary);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .remove-item-btn:hover { color: #ef4444; }
+
+        /* Tag Input */
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--sys-surface-1);
+            border: 1px solid var(--sys-border);
+            border-radius: 12px;
+            min-height: 52px;
+            align-items: center;
+        }
+
+        .tag-pill {
+            background: var(--sys-surface-2);
+            color: var(--sys-text-primary);
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .tag-remove { cursor: pointer; opacity: 0.6; }
+        .tag-remove:hover { opacity: 1; }
+
+        .tag-main-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 0.5rem;
+            min-width: 100px;
+        }
+
+        /* Sticky Footer */
+        .form-footer {
+            padding: 1.5rem 2.5rem;
+            background: var(--admin-surface);
+            border-top: 1px solid var(--sys-border);
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-accent);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            animation: slideInRight 0.3s ease-out;
+        }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Scrollbar */
+        .form-body::-webkit-scrollbar { width: 4px; }
+        .form-body::-webkit-scrollbar-thumb { background: var(--sys-border); border-radius: 10px; }
     </style>
 </head>
 <body>
     <div class="bg-grid"></div>
+    <div id="toast-container"></div>
 
     <div class="admin-layout">
         <aside class="admin-sidebar">
-            <h2 class="nav-brand">ibrahim.admin</h2>
+            <h2 class="nav-brand">ibrahim.systems</h2>
             <nav class="nav-list">
                 <button class="nav-btn active" data-tab="tab-dashboard"><i class="fa-solid fa-gauge"></i> Overview</button>
+                <button class="nav-btn" data-tab="tab-settings"><i class="fa-solid fa-sliders"></i> Site Settings</button>
+                <button class="nav-btn" data-tab="tab-services"><i class="fa-solid fa-server"></i> Service Solutions</button>
                 <button class="nav-btn" data-tab="tab-projects"><i class="fa-solid fa-folder"></i> Projects</button>
-                <button class="nav-btn" data-tab="tab-highlights"><i class="fa-solid fa-bolt"></i> Highlights</button>
+                <button class="nav-btn" data-tab="tab-highlights"><i class="fa-solid fa-bolt"></i> Career Journey</button>
             </nav>
-            <button id="logout-btn" class="btn btn-outline" style="width: 100%; border-radius: 12px; margin-top: auto;">Sign Out</button>
+            <div style="margin-top: auto; padding-top: 2rem;">
+                <button id="logout-btn" class="btn btn-outline" style="width: 100%; border-radius: 12px;">Sign Out</button>
+            </div>
         </aside>
 
         <main class="admin-main">
+            <!-- Dashboard Tab -->
             <div id="tab-dashboard" class="tab-content active">
-                <h1 class="m-title">System Status</h1>
-                <div class="db-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem;">
-                    <div class="glass-card" style="padding: 2rem;">
-                        <span style="color: var(--sys-text-secondary); font-size: 0.8rem;">Live Projects</span>
-                        <h2 id="stat-projects" style="font-size: 3rem;">-</h2>
+                <h1 class="m-title" style="margin-bottom: 2rem;">Systems Overview</h1>
+                <div class="db-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                    <div class="glass-card" style="padding: 2.25rem;">
+                        <span style="color: var(--sys-text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Projects</span>
+                        <h2 id="stat-projects" style="font-size: 3.5rem; font-family: 'Cabinet Grotesk';">-</h2>
                     </div>
-                    <div class="glass-card" style="padding: 2rem;">
-                        <span style="color: var(--sys-text-secondary); font-size: 0.8rem;">Career Highlights</span>
-                        <h2 id="stat-highlights" style="font-size: 3rem;">-</h2>
+                    <div class="glass-card" style="padding: 2.25rem;">
+                        <span style="color: var(--sys-text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em;">Career Nodes</span>
+                        <h2 id="stat-highlights" style="font-size: 3.5rem; font-family: 'Cabinet Grotesk';">-</h2>
                     </div>
                 </div>
             </div>
 
+            <!-- Site Settings Tab -->
+            <div id="tab-settings" class="tab-content">
+                <div class="data-header">
+                    <div>
+                        <h1 class="m-title">Site Settings</h1>
+                        <p style="color: var(--sys-text-secondary); font-size: 0.9rem;">Manage global metadata, hero copy, and site identity.</p>
+                    </div>
+                    <button class="btn btn-primary primary-glow" id="btn-save-settings">Commit Site Changes</button>
+                </div>
+
+                <div class="glass-card" style="padding: 3rem; max-width: 1000px;">
+                    <form id="settings-form">
+                        <!-- Hero Settings -->
+                        <div class="form-section">
+                            <span class="section-title">Hero Configuration</span>
+                            <div class="form-group"><label>Status Badge Text</label><input type="text" id="s-hero-status" class="glass-input" placeholder="Open to collaborations"></div>
+                            <div class="form-group"><label>Headline (use [text] for cyan highlight)</label><input type="text" id="s-hero-title" class="glass-input"></div>
+                            <div class="form-group"><label>Subtitle Details</label><textarea id="s-hero-subtitle" class="glass-input glass-textarea"></textarea></div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group"><label>CTA Button Label</label><input type="text" id="s-hero-cta" class="glass-input"></div>
+                                <div class="form-group"><label>Resume Label</label><input type="text" id="s-hero-resumeLabel" class="glass-input"></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Resume/Link URL</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <input type="text" id="s-hero-resumeUrl" class="glass-input" style="flex: 1;">
+                                    <button type="button" class="btn btn-outline file-trigger" data-target="file-resume"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                                    <input type="file" id="file-resume" style="display: none;" accept=".pdf,.doc,.docx">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Settings -->
+                        <div class="form-section">
+                            <span class="section-title">Profile Identity</span>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group"><label>Display Name</label><input type="text" id="s-profile-name" class="glass-input"></div>
+                                <div class="form-group"><label>Profile Tag (e.g. CS '27)</label><input type="text" id="s-profile-tag" class="glass-input"></div>
+                            </div>
+                            <div class="form-group"><label>Professional Role</label><input type="text" id="s-profile-role" class="glass-input"></div>
+                            <div class="form-group"><label>Location</label><input type="text" id="s-profile-location" class="glass-input"></div>
+                            <div class="form-group">
+                                <label>Profile Image URL</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <input type="text" id="s-profile-img" class="glass-input" style="flex: 1;">
+                                    <button type="button" class="btn btn-outline file-trigger" data-target="file-profile"><i class="fa-solid fa-image"></i> Upload</button>
+                                    <input type="file" id="file-profile" style="display: none;" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About Settings -->
+                        <div class="form-section">
+                            <span class="section-title">Engineering Bio</span>
+                            <div class="form-group"><label>About Heading</label><input type="text" id="s-about-heading" class="glass-input"></div>
+                            <div class="form-group"><label>Bio Highlight (Large Text)</label><textarea id="s-about-highlight" class="glass-input glass-textarea"></textarea></div>
+                            <div class="form-group"><label>Main Bio Paragraph</label><textarea id="s-about-body" class="glass-input glass-textarea"></textarea></div>
+                            <div class="form-group">
+                                <label>Skill Chips (Enter to add)</label>
+                                <div class="tag-input-container" id="s-about-chips-container">
+                                    <input type="text" id="s-about-chips-input" class="tag-main-input" placeholder="Add skill...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Settings -->
+                        <div class="form-section">
+                            <span class="section-title">Global Connectivity</span>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group"><label><i class="fa-brands fa-github"></i> GitHub URL</label><input type="url" id="s-socials-github" class="glass-input"></div>
+                                <div class="form-group"><label><i class="fa-brands fa-linkedin"></i> LinkedIn URL</label><input type="url" id="s-socials-linkedin" class="glass-input"></div>
+                                <div class="form-group"><label><i class="fa-brands fa-x-twitter"></i> X / Twitter URL</label><input type="url" id="s-socials-twitter" class="glass-input"></div>
+                                <div class="form-group"><label><i class="fa-brands fa-whatsapp"></i> WhatsApp Number</label><input type="text" id="s-socials-whatsapp" class="glass-input" placeholder="+123456789"></div>
+                                <div class="form-group"><label><i class="fa-regular fa-envelope"></i> Public Email Address</label><input type="email" id="s-socials-email" class="glass-input" placeholder="you@company.com"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Services Tab -->
+            <div id="tab-services" class="tab-content">
+                <div class="data-header">
+                    <div>
+                        <h1 class="m-title">Service Solutions</h1>
+                        <p style="color: var(--sys-text-secondary); font-size: 0.9rem;">Define and deploy the value-add services you offer to founders.</p>
+                    </div>
+                    <button class="btn btn-primary primary-glow" id="btn-add-service"><i class="fa-solid fa-plus"></i> New Service</button>
+                </div>
+                <div id="services-admin-list"></div>
+            </div>
+
+            <!-- Projects Tab -->
             <div id="tab-projects" class="tab-content">
                 <div class="data-header">
-                    <h1 class="m-title">Projects</h1>
-                    <button class="btn btn-primary" id="btn-add-project"><i class="fa-solid fa-plus"></i></button>
+                    <div>
+                        <h1 class="m-title">Selected Work</h1>
+                        <p style="color: var(--sys-text-secondary); font-size: 0.9rem;">Manage production systems and flagship deployments.</p>
+                    </div>
+                    <button class="btn btn-primary primary-glow" id="btn-add-project"><i class="fa-solid fa-plus"></i> New Project</button>
                 </div>
                 <div id="project-admin-list"></div>
             </div>
 
+            <!-- Highlights Tab -->
             <div id="tab-highlights" class="tab-content">
                 <div class="data-header">
-                    <h1 class="m-title">Highlights</h1>
-                    <button class="btn btn-primary" id="btn-add-highlight"><i class="fa-solid fa-plus"></i></button>
+                    <div>
+                        <h1 class="m-title">Career Journey</h1>
+                        <p style="color: var(--sys-text-secondary); font-size: 0.9rem;">Chronicle milestones, startups, and technical evolution.</p>
+                    </div>
+                    <button class="btn btn-primary" id="btn-add-highlight"><i class="fa-solid fa-plus"></i> Add Highlight</button>
                 </div>
                 <div id="highlight-admin-list"></div>
             </div>
         </main>
     </div>
 
-    <!-- PROJECT FORM -->
+    <!-- PROJECT MODAL OVERLAY -->
     <div id="project-overlay" class="form-overlay">
         <div class="form-container">
-            <h2 class="m-title" id="p-form-title">Update Project</h2>
-            <form id="project-form" class="m-form">
+            <div class="form-header">
+                <h2 class="m-title" id="p-form-title" style="font-size: 2rem;">Build System</h2>
+                <button class="btn-outline close-form-btn" style="width: 40px; height: 40px; border-radius: 50%;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="project-form" class="form-body">
                 <input type="hidden" id="p-id">
-                <div class="form-group"><label>Title</label><input type="text" id="p-title" class="glass-input" required></div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group"><label>Tier</label><select id="p-tier" class="glass-input"><option value="major">Major</option><option value="mini">Mini</option></select></div>
-                    <div class="form-group"><label>Order</label><input type="number" id="p-order" class="glass-input"></div>
+                
+                <!-- Section 1: Basic Info -->
+                <div class="form-section">
+                    <span class="section-title">Core Architecture</span>
+                    <div class="form-group"><label>Project Title</label><input type="text" id="p-title" class="glass-input" required placeholder="Amanah Logistics"></div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div class="form-group"><label>System Tier</label><select id="p-tier" class="glass-input"><option value="major">Major / Flagship</option><option value="mini">Mini / Module</option></select></div>
+                        <div class="form-group"><label>Priority Order</label><input type="number" id="p-order" class="glass-input" value="1"></div>
+                        <div class="form-group"><label>Project Status</label><input type="text" id="p-status" class="glass-input" placeholder="Live / Beta"></div>
+                    </div>
+                    
+                    <div class="form-group"><label>Deep Description</label><textarea id="p-desc" class="glass-input glass-textarea" required placeholder="Designed the systems layer end-to-end..."></textarea></div>
                 </div>
-                <div class="form-group"><label>Status</label><input type="text" id="p-status" class="glass-input"></div>
-                <div class="form-group"><label>Stack (Comma separated)</label><input type="text" id="p-stack" class="glass-input"></div>
-                <div class="form-group"><label>Description</label><textarea id="p-desc" class="glass-input glass-textarea" required></textarea></div>
-                <div class="form-group"><label>Architecture Notes</label><textarea id="p-arch" class="glass-input glass-textarea"></textarea></div>
-                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save</button>
-                    <button type="button" class="btn btn-outline close-form-btn">Cancel</button>
+
+                <!-- Section 2: Metadata -->
+                <div class="form-section">
+                    <span class="section-title">System Context / Metadata</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group"><label>Timeline</label><input type="text" id="p-timeline" class="glass-input" placeholder="2025 - Present"></div>
+                        <div class="form-group"><label>Your Role</label><input type="text" id="p-role" class="glass-input" placeholder="Technical Co-founder"></div>
+                        <div class="form-group"><label>Team Size</label><input type="text" id="p-teamSize" class="glass-input" placeholder="Solo / 3-5"></div>
+                        <div class="form-group"><label>System Category</label><input type="text" id="p-projectType" class="glass-input" placeholder="Logistics Infrastructure"></div>
+                    </div>
+                    <div class="form-group" style="flex-direction: row; align-items: center; gap: 1rem;">
+                        <input type="checkbox" id="p-featured" style="width: auto;">
+                        <label for="p-featured" style="margin-bottom: 0;">Feature in hero section</label>
+                    </div>
+                </div>
+
+                <!-- Section 3: Tech Stack -->
+                <div class="form-section">
+                    <span class="section-title">Infrastructure Stack</span>
+                    <div class="form-group">
+                        <label>Technologies Used (Enter to add)</label>
+                        <div class="tag-input-container" id="p-stack-container">
+                            <input type="text" id="p-stack-input" class="tag-main-input" placeholder="Add technology...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Project Links -->
+                <div class="form-section">
+                    <span class="section-title">External Synchronization</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group"><label>Live Website URL</label><input type="url" id="p-liveUrl" class="glass-input" placeholder="https://..."></div>
+                        <div class="form-group"><label>GitHub Repository</label><input type="url" id="p-githubUrl" class="glass-input" placeholder="https://github.com/..."></div>
+                        <div class="form-group"><label>Case Study / Docs</label><input type="url" id="p-caseStudyUrl" class="glass-input" placeholder="https://medium.com/..."></div>
+                        <div class="form-group"><label>Demo Video</label><input type="url" id="p-demoUrl" class="glass-input" placeholder="https://youtube.com/..."></div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Highlights -->
+                <div class="form-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <span class="section-title" style="margin-bottom: 0;">System Highlights</span>
+                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" id="add-highlight-segment"><i class="fa-solid fa-plus"></i> Add Segment</button>
+                    </div>
+                    <div class="dynamic-list" id="p-highlights-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Section 6: Engineering Metrics -->
+                <div class="form-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <span class="section-title" style="margin-bottom: 0;">Engineering Metrics</span>
+                        <button type="button" class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" id="add-metric-segment"><i class="fa-solid fa-plus"></i> Add Metric</button>
+                    </div>
+                    <div class="dynamic-list" id="p-metrics-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Section 7: Media -->
+                <div class="form-section">
+                    <span class="section-title">System Media</span>
+                    <div class="form-group">
+                        <label>Cover Image URL</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="p-coverImage" class="glass-input" style="flex: 1;">
+                            <button type="button" class="btn btn-outline file-trigger" data-target="file-project-img"><i class="fa-solid fa-image"></i> Upload</button>
+                            <input type="file" id="file-project-img" style="display: none;" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Video Embed HTML (Optional)</label><textarea id="p-videoEmbed" class="glass-input glass-textarea" placeholder="<iframe..."></textarea></div>
                 </div>
             </form>
+
+            <div class="form-footer">
+                <button type="button" id="project-form-submit" class="btn btn-primary primary-glow" style="flex: 2;">Commit Changes</button>
+                <button type="button" class="btn btn-outline close-form-btn" style="flex: 1;">Discard</button>
+            </div>
         </div>
     </div>
 
-    <!-- HIGHLIGHT FORM -->
+    <!-- SERVICE MODAL -->
+    <div id="service-overlay" class="form-overlay">
+        <div class="form-container" style="max-width: 550px;">
+            <div class="form-header">
+                <h2 class="m-title" id="s-form-title">Propose Service</h2>
+                <button class="btn-outline close-form-btn" style="width: 40px; height: 40px; border-radius: 50%;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="service-form" class="form-body">
+                <input type="hidden" id="service-id">
+                <div class="form-group"><label>Service Icon (FontAwesome class)</label><input type="text" id="service-icon" class="glass-input" required placeholder="fa-solid fa-code"></div>
+                <div class="form-group"><label>Service Title</label><input type="text" id="service-title" class="glass-input" required placeholder="MVP Development"></div>
+                <div class="form-group"><label>Description</label><textarea id="service-description" class="glass-input glass-textarea" required placeholder="Helping founders ship faster..."></textarea></div>
+                <div class="form-group"><label>Priority Order</label><input type="number" id="service-order" class="glass-input" value="1"></div>
+            </form>
+            
+            <div class="form-footer">
+                <button type="button" id="service-form-submit" class="btn btn-primary" style="flex: 1;">Deploy Service</button>
+                <button type="button" class="btn btn-outline close-form-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JOURNEY HIGHLIGHT MODAL -->
     <div id="highlight-overlay" class="form-overlay">
-        <div class="form-container">
-            <h2 class="m-title" id="h-form-title">Update Highlight</h2>
-            <form id="highlight-form" class="m-form">
+        <div class="form-container" style="max-width: 600px;">
+            <div class="form-header">
+                <h2 class="m-title" id="h-form-title">Update Highlight</h2>
+                <button class="btn-outline close-form-btn" style="width: 40px; height: 40px; border-radius: 50%;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="highlight-form" class="form-body">
                 <input type="hidden" id="h-id">
-                <div class="form-group"><label>Year / Category</label><input type="text" id="h-year" class="glass-input" required></div>
-                <div class="form-group"><label>Title</label><input type="text" id="h-title" class="glass-input" required></div>
-                <div class="form-group"><label>Short Preview (Hero & Summary)</label><textarea id="h-preview" class="glass-input glass-textarea" placeholder="Max 15-20 words..."></textarea></div>
+                <div class="form-group"><label>Year / Category</label><input type="text" id="h-year" class="glass-input" required placeholder="2025"></div>
+                <div class="form-group"><label>Title</label><input type="text" id="h-title" class="glass-input" required placeholder="Founded Amanah Logistics"></div>
+                <div class="form-group"><label>Short Preview (Hero Stats)</label><textarea id="h-preview" class="glass-input glass-textarea" placeholder="Max 15-20 words..."></textarea></div>
                 <div class="form-group"><label>Full Description (Journey Modal)</label><textarea id="h-desc" class="glass-input glass-textarea" required></textarea></div>
-                <div class="form-group"><label>Languages Learned (Comma separated)</label><input type="text" id="h-langs" class="glass-input" placeholder="e.g. JavaScript, Python, Go"></div>
-                <div class="form-group"><label>Order</label><input type="number" id="h-order" class="glass-input" value="1"></div>
-                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save</button>
-                    <button type="button" class="btn btn-outline close-form-btn">Cancel</button>
+                
+                <div class="form-group">
+                    <label>Languages (Enter to add)</label>
+                    <div class="tag-input-container" id="h-langs-container">
+                        <input type="text" id="h-langs-input" class="tag-main-input" placeholder="Add language...">
+                    </div>
                 </div>
+                
+                <div class="form-group"><label>Priority Order</label><input type="number" id="h-order" class="glass-input" value="1"></div>
             </form>
+
+            <div class="form-footer">
+                <button type="button" id="highlight-form-submit" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                <button type="button" class="btn btn-outline close-form-btn">Cancel</button>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { collection, onSnapshot, query, orderBy, deleteDoc, doc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { db, auth } from "../../js/firestore.js";
-
-        let localProjects = {};
-        let localHighlights = {};
-
-        // AUTH
-        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "login.html"; });
-        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
-
-        // TABS
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                document.getElementById(btn.dataset.tab).classList.add('active');
-                btn.classList.add('active');
-            });
-        });
-
-        // FORM HELPERS
-        const closeModals = () => document.querySelectorAll('.form-overlay').forEach(o => o.classList.remove('active'));
-        document.querySelectorAll('.close-form-btn').forEach(b => b.addEventListener('click', closeModals));
-
-        // RENDER LISTS
-        onSnapshot(query(collection(db, "projects"), orderBy("order", "asc")), (snap) => {
-            const list = document.getElementById('project-admin-list');
-            list.innerHTML = '';
-            document.getElementById('stat-projects').innerText = snap.size;
-            snap.forEach(d => {
-                const data = d.data();
-                localProjects[d.id] = data;
-                const card = document.createElement('div');
-                card.className = 'admin-card';
-                card.innerHTML = `
-                    <div style="flex: 1;">
-                        <strong>${data.title}</strong>
-                        <div class="card-preview-text">${data.desc}</div>
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-outline" onclick="editProject('${d.id}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-outline" onclick="deleteItem('projects', '${d.id}')" style="color: #ef4444;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        });
-
-        onSnapshot(query(collection(db, "highlights"), orderBy("order", "asc")), (snap) => {
-            const list = document.getElementById('highlight-admin-list');
-            list.innerHTML = '';
-            document.getElementById('stat-highlights').innerText = snap.size;
-            snap.forEach(d => {
-                const data = d.data();
-                localHighlights[d.id] = data;
-                const card = document.createElement('div');
-                card.className = 'admin-card';
-                card.innerHTML = `
-                    <div style="flex: 1;">
-                        <strong>${data.year}: ${data.title}</strong>
-                        <div class="card-preview-text">${data.description}</div>
-                        <div style="margin-top: 0.5rem;">${(data.languages || []).map(l => `<span class="lang-tag">${l}</span>`).join('')}</div>
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-outline" onclick="editHighlight('${d.id}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="btn btn-outline" onclick="deleteItem('highlights', '${d.id}')" style="color: #ef4444;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        });
-
-        // ACTIONS
-        window.deleteItem = async (c, id) => { if(confirm("Delete item?")) await deleteDoc(doc(db, c, id)); };
-
-        // EDIT LOGIC
-        window.editProject = (id) => {
-            const d = localProjects[id];
-            document.getElementById('p-id').value = id;
-            document.getElementById('p-title').value = d.title;
-            document.getElementById('p-tier').value = d.tier;
-            document.getElementById('p-order').value = d.order;
-            document.getElementById('p-status').value = d.status || '';
-            document.getElementById('p-stack').value = (d.techStack || []).join(', ');
-            document.getElementById('p-desc').value = d.desc;
-            document.getElementById('p-arch').value = d.technicalDeepDive?.architecture || '';
-            document.getElementById('p-form-title').innerText = "Edit Project";
-            document.getElementById('project-overlay').classList.add('active');
-        };
-
-        window.editHighlight = (id) => {
-            const d = localHighlights[id];
-            document.getElementById('h-id').value = id;
-            document.getElementById('h-year').value = d.year;
-            document.getElementById('h-title').value = d.title;
-            document.getElementById('h-preview').value = d.preview || '';
-            document.getElementById('h-desc').value = d.description;
-            document.getElementById('h-langs').value = (d.languages || []).join(', ');
-            document.getElementById('h-order').value = d.order;
-            document.getElementById('h-form-title').innerText = "Edit Highlight";
-            document.getElementById('highlight-overlay').classList.add('active');
-        };
-
-        // SUBMIT LOGIC
-        document.getElementById('project-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('p-id').value;
-            const data = {
-                title: document.getElementById('p-title').value,
-                tier: document.getElementById('p-tier').value,
-                order: parseInt(document.getElementById('p-order').value),
-                status: document.getElementById('p-status').value,
-                techStack: document.getElementById('p-stack').value.split(',').map(s => s.trim()).filter(s => s),
-                desc: document.getElementById('p-desc').value,
-                technicalDeepDive: { architecture: document.getElementById('p-arch').value },
-                isMajor: document.getElementById('p-tier').value === 'major'
-            };
-            if(id) await setDoc(doc(db, "projects", id), data);
-            else await addDoc(collection(db, "projects"), data);
-            closeModals();
-        });
-
-        document.getElementById('highlight-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('h-id').value;
-            const data = {
-                year: document.getElementById('h-year').value,
-                title: document.getElementById('h-title').value,
-                preview: document.getElementById('h-preview').value,
-                description: document.getElementById('h-desc').value,
-                languages: document.getElementById('h-langs').value.split(',').map(s => s.trim()).filter(s => s),
-                order: parseInt(document.getElementById('h-order').value)
-            };
-            if(id) await setDoc(doc(db, "highlights", id), data);
-            else await addDoc(collection(db, "highlights"), data);
-            closeModals();
-        });
-
-        document.getElementById('btn-add-project').onclick = () => { document.getElementById('project-form').reset(); document.getElementById('p-id').value = ''; document.getElementById('p-form-title').innerText = "New Project"; document.getElementById('project-overlay').classList.add('active'); };
-        document.getElementById('btn-add-highlight').onclick = () => { document.getElementById('highlight-form').reset(); document.getElementById('h-id').value = ''; document.getElementById('h-form-title').innerText = "New Highlight"; document.getElementById('highlight-overlay').classList.add('active'); };
-
-    </script>
+    <!-- Scripts -->
+    <script type="module" src="../../js/admin.js"></script>
 </body>
 </html>
