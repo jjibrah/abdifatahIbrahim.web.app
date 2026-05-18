@@ -276,6 +276,7 @@ import { db, auth, storage } from "./firestore.js";
         document.getElementById('s-socials-twitter').value = socials.twitter || '';
         document.getElementById('s-socials-whatsapp').value = socials.whatsapp || '';
         document.getElementById('s-socials-email').value = socials.email || '';
+        document.getElementById('s-socials-tiktok').value = socials.tiktok || '';
     };
 
     onSnapshot(doc(db, "meta", "global"), (snap) => {
@@ -312,7 +313,8 @@ import { db, auth, storage } from "./firestore.js";
                     linkedin: document.getElementById('s-socials-linkedin').value,
                     twitter: document.getElementById('s-socials-twitter').value,
                     whatsapp: document.getElementById('s-socials-whatsapp').value,
-                    email: document.getElementById('s-socials-email').value
+                    email: document.getElementById('s-socials-email').value,
+                    tiktok: document.getElementById('s-socials-tiktok').value
                 },
                 branding: { title: 'ibrahim.' }, // Default or add field
                 updatedAt: serverTimestamp()

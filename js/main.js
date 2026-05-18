@@ -48,6 +48,7 @@ import { db, logEvent, analytics } from "./firestore.js";
             { key: 'linkedin', icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn' },
             { key: 'twitter', icon: 'fa-brands fa-x-twitter', label: 'X' },
             { key: 'whatsapp', icon: 'fa-brands fa-whatsapp', label: 'WhatsApp' },
+            { key: 'tiktok', icon: 'fa-brands fa-tiktok', label: 'TikTok' },
             { key: 'email', icon: 'fa-regular fa-envelope', label: 'Email' }
         ];
 
